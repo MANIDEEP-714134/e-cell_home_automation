@@ -32,7 +32,7 @@ function HomePage({ devices, toggleDevice }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex flex-col">
-      <div className="text-center p-4 text-2xl font-bold">E-CELL SMART CONTROL</div>
+      <div className="text-center p-4 text-2xl font-bold">Spark X</div>
 
       {/* Add Device Button */}
       <div className="px-4">
@@ -40,7 +40,7 @@ function HomePage({ devices, toggleDevice }) {
           onClick={() => navigate("/add")}
           className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-4 rounded-xl mb-4 transition"
         >
-          <Plus className="w-5 h-5" /> Add Device
+          <Plus className="w-5 h-5" /> Add New Panel
         </button>
       </div>
 

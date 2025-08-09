@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/android": "^7.4.0",
-    "@capacitor/cli": "^7.4.0",
-    "@capacitor/core": "^7.4.0",
+    "@capacitor/android": "^7.4.1",
+    "@capacitor/cli": "^7.4.1",
+    "@capacitor/core": "^7.4.1",
     "firebase": "^11.9.1",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
