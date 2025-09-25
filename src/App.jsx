@@ -32,7 +32,7 @@ function HomePage({ devices, toggleDevice }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex flex-col">
-      <div className="text-center p-4 text-2xl font-bold">Spark X</div>
+      <div className="text-center p-4 text-2xl font-bold">AERATOR CONTROLLING</div>
 
       {/* Add Device Button */}
       <div className="px-4">
@@ -40,7 +40,7 @@ function HomePage({ devices, toggleDevice }) {
           onClick={() => navigate("/add")}
           className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-4 rounded-xl mb-4 transition"
         >
-          <Plus className="w-5 h-5" /> Add New Panel
+          <Plus className="w-5 h-5" /> Add AERATOR LINE
         </button>
       </div>
 
@@ -95,21 +95,46 @@ function SmartControlApp() {
   }, []);
 
   // Toggle device and update Firebase
-  const toggleDevice = (id) => {
-    setDevices((prev) => {
-      const updated = prev.map((d) =>
-        d.id === id ? { ...d, state: !d.state } : d
-      );
-      const toggled = updated.find((d) => d.id === id);
+  // Toggle device and update Firebase + call API
+const toggleDevice = (id) => {
+  // 1️⃣ Toggle state locally
+  const toggledDevice = devices.find((d) => d.id === id);
+  if (!toggledDevice) return;
 
-      set(ref(db, `devices/${id}`), {
-        name: toggled.name,
-        state: toggled.state,
-      });
+  const newState = !toggledDevice.state;
 
-      return updated;
-    });
+  setDevices((prev) =>
+    prev.map((d) => (d.id === id ? { ...d, state: newState } : d))
+  );
+
+  // 2️⃣ Determine payload
+  const relayPayloads = {
+    "LINE1": { deviceId: "VISHNU123", code: 202 },
+    "LINE2": { deviceId: "VISHNU123", code: 203 },
+    "LINE12": { deviceId: "VISHNU123", code: 204 },
   };
+
+  const payload = relayPayloads[toggledDevice.name];
+  if (!payload) return;
+
+  // 3️⃣ Call API
+  fetch("http://13.233.76.8:8080/api/control-response", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(`API Response for ${toggledDevice.name}:`, data))
+    .catch((err) => console.error(`API Error for ${toggledDevice.name}:`, err));
+
+  // 4️⃣ Update Firebase
+  set(ref(db, `devices/${id}`), {
+    name: toggledDevice.name,
+    state: newState,
+  });
+};
+
+
 
   // Add device to Firebase
   const handleAddDevice = (newDevice) => {
